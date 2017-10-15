@@ -2,7 +2,6 @@
 from collections import Counter, OrderedDict
 import plotly.plotly as py
 import plotly.graph_objs as go
-from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
 def get_tokens_and_frequency(token_list):

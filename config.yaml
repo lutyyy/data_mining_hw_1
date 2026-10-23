@@ -1,0 +1,50 @@
+# 價格歷史與發文紀錄（由 GitHub Actions 自動更新並 commit）
+state_file: data/state.json
+
+# 產生文案用的 Claude 模型
+claude_model: claude-opus-5-5
+
+# 蝦皮：每個分類底下的搜尋關鍵字（每個關鍵字抓銷量前 50 名）
+shopee_keywords:
+  3C周邊:
+    - 機械鍵盤
+    - 電競滑鼠
+    - SSD 固態硬碟
+    - 行動電源
+    - 藍牙耳機
+    - 螢幕 27吋
+  遊戲:
+    - Switch 遊戲片
+    - PS5 遊戲片
+    - Switch 手把
+    - PS5 手把
+
+# momo / 酷澎：手動挑選要追蹤的商品
+# page_url 用來讀取價格，affiliate_url 是你在後台產生的分潤連結
+watchlist:
+  # - source: momo
+  #   niche: 3C周邊
+  #   name: 羅技 MX Master 3S 無線滑鼠
+  #   page_url: https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=XXXXXXX
+  #   affiliate_url: https://你的momo分潤連結
+  # - source: coupang
+  #   niche: 遊戲
+  #   name: Nintendo Switch OLED 主機
+  #   page_url: https://www.tw.coupang.com/products/XXXXXXX
+  #   affiliate_url: https://你的酷澎分潤連結
+  #   price_regex: '"finalPrice":\s*([\d.]+)'   # 選填：通用規則抓不到價格時再加
+
+rules:
+  lookback_days: 30            # 跟過去幾天的價格比較
+  min_history_days: 7          # 累積幾天資料後才用自己的歷史價格判斷
+  min_drop_pct: 10             # 比近期中位數便宜多少 % 才算優惠（且必須是區間最低）
+  min_seller_discount_pct: 40  # 資料不足時，賣家標示折扣至少要多少 %（較嚴格，因為原價常被灌水）
+  min_rating: 4.5              # 蝦皮商品最低評分
+  min_sales: 50                # 蝦皮商品最低銷量
+  repost_cooldown_days: 7      # 同一商品幾天內不重複發
+  repost_extra_drop_pct: 5     # 冷卻期內再降價超過此 % 仍會再發
+  max_posts_per_run: 5         # 每次執行最多發幾則，避免洗版
+
+# LINE 推播有月額度，只推每天最好的幾則
+line_max_per_day: 2
+line_min_drop_pct: 20
